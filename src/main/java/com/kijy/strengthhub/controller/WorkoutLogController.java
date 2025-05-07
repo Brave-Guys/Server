@@ -42,9 +42,9 @@ public class WorkoutLogController {
             @RequestParam String userId,
             @RequestParam String startDate,
             @RequestParam String endDate
-    ) throws ParseException {
+    ) {
         List<WorkoutLog> logs = service.getLogsInRange(userId, startDate, endDate);
-        return ResponseEntity.ok(Map.of("logs", logs)); // logs 키 포함한 JSON
+        return ResponseEntity.ok(Map.of("logs", logs));
     }
 
     @DeleteMapping("/{id}")

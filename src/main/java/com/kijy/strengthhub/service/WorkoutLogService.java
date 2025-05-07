@@ -8,9 +8,13 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @Service
 @RequiredArgsConstructor
@@ -18,11 +22,15 @@ public class WorkoutLogService {
 
     private final WorkoutLogRepository workoutLogRepository;
 
-    public WorkoutLog save(WorkoutLogRequestDto dto) throws ParseException {
+    public WorkoutLog save(WorkoutLogRequestDto dto) {
+        LocalDate localDate = LocalDate.parse(dto.getDate());
+        ZonedDateTime zdt = localDate.atTime(9, 0).atZone(ZoneId.of("Asia/Seoul"));
+        Date parsedDate = Date.from(zdt.toInstant());
+
         WorkoutLog log = WorkoutLog.builder()
                 .userId(dto.getUserId())
                 .name(dto.getName())
-                .date(new SimpleDateFormat("yyyy-MM-dd").parse(dto.getDate()))
+                .date(parsedDate)
                 .duration(dto.getDuration())
                 .distance(dto.getDistance())
                 .sets(dto.getSets())
@@ -31,29 +39,33 @@ public class WorkoutLogService {
                 .exerciseType(dto.getExerciseType())
                 .part(dto.getPart())
                 .build();
+
         return workoutLogRepository.save(log);
     }
 
+
     // 특정 날짜의 운동 기록
-    public List<WorkoutLog> getLogsByDate(String userId, String dateStr) throws ParseException {
-        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+    public List<WorkoutLog> getLogsByDate(String userId, String dateStr) {
+        LocalDate localDate = LocalDate.parse(dateStr);
+        ZonedDateTime startZdt = localDate.atStartOfDay(ZoneId.of("Asia/Seoul"));
+        ZonedDateTime endZdt = startZdt.plusDays(1); // 다음날 00:00
 
-        Date start = isoFormat.parse(dateStr);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(start);
-        calendar.add(Calendar.DATE, 1);
-        Date end = calendar.getTime();
+        Date start = Date.from(startZdt.toInstant());
+        Date end = Date.from(endZdt.toInstant());
 
         return workoutLogRepository.findByUserIdAndDateBetweenOrderByDateAsc(userId, start, end);
     }
 
     // 날짜 범위의 운동 기록
-    public List<WorkoutLog> getLogsInRange(String userId, String startDateStr, String endDateStr) throws ParseException {
-        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+    public List<WorkoutLog> getLogsInRange(String userId, String startDateStr, String endDateStr) {
+        LocalDate startDate = LocalDate.parse(startDateStr);
+        LocalDate endDate = LocalDate.parse(endDateStr).plusDays(1); // 종료일 포함하려면 하루 더해줌
 
-        Date start = isoFormat.parse(startDateStr);
-        Date end = isoFormat.parse(endDateStr);
+        ZonedDateTime startZdt = startDate.atStartOfDay(ZoneId.of("Asia/Seoul"));
+        ZonedDateTime endZdt = endDate.atStartOfDay(ZoneId.of("Asia/Seoul"));
+
+        Date start = Date.from(startZdt.toInstant());
+        Date end = Date.from(endZdt.toInstant());
 
         return workoutLogRepository.findByUserIdAndDateBetweenOrderByDateAsc(userId, start, end);
     }
@@ -62,10 +74,13 @@ public class WorkoutLogService {
         workoutLogRepository.deleteById(id);
     }
 
-    public WorkoutLog update(Long id, WorkoutLogRequestDto dto) throws ParseException {
+    public WorkoutLog update(Long id, WorkoutLogRequestDto dto) {
         WorkoutLog log = workoutLogRepository.findById(id).orElseThrow();
+        ZonedDateTime zdt = ZonedDateTime.parse(dto.getDate());
+        Date parsedDate = Date.from(zdt.toInstant());
+
         log.setName(dto.getName());
-        log.setDate(new SimpleDateFormat("yyyy-MM-dd").parse(dto.getDate()));
+        log.setDate(parsedDate);
         log.setDuration(dto.getDuration());
         log.setDistance(dto.getDistance());
         log.setSets(dto.getSets());
@@ -75,4 +90,5 @@ public class WorkoutLogService {
         log.setPart(dto.getPart());
         return workoutLogRepository.save(log);
     }
+
 }
