@@ -39,11 +39,15 @@ public class AuthController {
         User user = userRepository.findByUserId(dto.getUsername())
                 .orElse(null);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("존재하지 않는 계정입니다.");
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "존재하지 않는 계정입니다."));
         }
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다.");
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "비밀번호가 일치하지 않습니다."));
         }
 
         Map<String, Object> claims = new HashMap<>();
@@ -52,8 +56,7 @@ public class AuthController {
         claims.put("role", user.getRole());
 
         String token = jwtUtil.createToken(claims);
-
-        user.setPassword(null); // 비밀번호는 응답에서 제거
+        user.setPassword(null);
 
         return ResponseEntity.ok(
                 LoginResponseDto.builder()
