@@ -6,7 +6,7 @@ import lombok.Data;
 public class WorkoutLogRequestDto {
     private String userId;
     private String name;
-    private String date; // 문자열로 받고 변환
+    private String date;
     private Integer duration;
     private Integer distance;
     private Integer sets;

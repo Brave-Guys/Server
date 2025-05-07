@@ -34,19 +34,27 @@ public class WorkoutLogService {
         return workoutLogRepository.save(log);
     }
 
+    // 특정 날짜의 운동 기록
     public List<WorkoutLog> getLogsByDate(String userId, String dateStr) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date start = sdf.parse(dateStr);
-        Calendar c = Calendar.getInstance();
-        c.setTime(start);
-        c.add(Calendar.DATE, 1);
-        Date end = c.getTime();
+        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+
+        Date start = isoFormat.parse(dateStr);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(start);
+        calendar.add(Calendar.DATE, 1);
+        Date end = calendar.getTime();
+
         return workoutLogRepository.findByUserIdAndDateBetweenOrderByDateAsc(userId, start, end);
     }
 
-    public List<WorkoutLog> getLogsInRange(String userId, String startDate, String endDate) throws ParseException {
-        Date start = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
-        Date end = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+    // 날짜 범위의 운동 기록
+    public List<WorkoutLog> getLogsInRange(String userId, String startDateStr, String endDateStr) throws ParseException {
+        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+
+        Date start = isoFormat.parse(startDateStr);
+        Date end = isoFormat.parse(endDateStr);
+
         return workoutLogRepository.findByUserIdAndDateBetweenOrderByDateAsc(userId, start, end);
     }
 
