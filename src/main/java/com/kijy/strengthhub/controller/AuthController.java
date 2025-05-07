@@ -66,4 +66,33 @@ public class AuthController {
                         .build()
         );
     }
+
+    // 중복 확인
+    @GetMapping("/check-nickname")
+    public ResponseEntity<?> checkNickname(@RequestParam(required = false) String nickname) {
+        if (nickname == null || nickname.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "닉네임을 입력해주세요."));
+        }
+
+        boolean exists = userRepository.existsByName(nickname);
+        if (exists) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "이미 사용 중인 닉네임입니다."));
+        } else {
+            return ResponseEntity.ok(Map.of("message", "사용 가능한 닉네임입니다."));
+        }
+    }
+
+    @GetMapping("/check-username")
+    public ResponseEntity<?> checkUsername(@RequestParam(required = false) String username) {
+        if (username == null || username.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "아이디를 입력해주세요."));
+        }
+
+        boolean exists = userRepository.existsByUserId(username);
+        if (exists) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "이미 사용 중인 아이디입니다."));
+        } else {
+            return ResponseEntity.ok(Map.of("message", "사용 가능한 아이디입니다."));
+        }
+    }
 }
