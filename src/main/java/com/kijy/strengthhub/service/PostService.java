@@ -1,11 +1,17 @@
 package com.kijy.strengthhub.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kijy.strengthhub.dto.PostRequestDto;
+import com.kijy.strengthhub.dto.PostResponseDto;
 import com.kijy.strengthhub.entity.Post;
 import com.kijy.strengthhub.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -71,5 +77,44 @@ public class PostService {
         post.setUpdatedAt(new Date());
 
         return postRepository.save(post);
+    }
+
+    public Page<Post> getPaginatedPosts(int page, int size, String category, String userId) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createDate"));
+
+        if (category != null && userId != null) {
+            return postRepository.findByCategoryAndWriterId(category, userId, pageable);
+        } else if (category != null) {
+            return postRepository.findByCategory(category, pageable);
+        } else if (userId != null) {
+            return postRepository.findByWriterId(userId, pageable);
+        } else {
+            return postRepository.findAll(pageable);
+        }
+    }
+
+    public PostResponseDto toResponseDto(Post post) {
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> imageUrls = List.of();
+
+        try {
+            if (post.getImageUrls() != null) {
+                imageUrls = mapper.readValue(post.getImageUrls(), new TypeReference<>() {});
+            }
+        } catch (Exception e) {
+            // 로깅만 해도 됨
+        }
+
+        return PostResponseDto.builder()
+                .id(post.getId())
+                .writerId(post.getWriterId())
+                .name(post.getName())
+                .content(post.getContent())
+                .category(post.getCategory())
+                .imageUrls(imageUrls)
+                .likeCount(post.getLikeCount())
+                .commentCount(post.getCommentCount())
+                .nickname("닉네임 자리") // 추후 유저 조인 시 갱신
+                .build();
     }
 }
