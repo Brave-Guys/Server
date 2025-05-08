@@ -18,7 +18,7 @@ public class PostResponseDto {
     private String content;
     private String category;
     private List<String> imageUrls;
-    private int likeCount;
+    private int likes;
     private int commentCount;
     private Date createDate;
     private Date updatedAt;

@@ -27,7 +27,7 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String imageUrls;
 
-    private int likeCount;
+    private int likes;
     private int commentCount;
 
     private Date createDate;

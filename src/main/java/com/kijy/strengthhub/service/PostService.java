@@ -46,7 +46,7 @@ public class PostService {
                 .category(dto.getCategory())
                 .imageUrls(imageUrlsJson)
                 .createDate(new Date())
-                .likeCount(0)
+                .likes(0)
                 .commentCount(0)
                 .build();
 
@@ -123,7 +123,7 @@ public class PostService {
                 .content(post.getContent())
                 .category(post.getCategory())
                 .imageUrls(imageUrls)
-                .likeCount(post.getLikeCount())
+                .likes(post.getLikes())
                 .commentCount(post.getCommentCount())
                 .createDate(post.getCreateDate())
                 .updatedAt(post.getUpdatedAt())

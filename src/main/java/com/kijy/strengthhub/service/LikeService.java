@@ -24,12 +24,23 @@ public class LikeService {
         Optional<Like> existing = likeRepository.findByUserIdAndPostIdAndPostTypeAndPostOrComment(
                 userId, postId, postType, postOrComment);
 
+        System.out.println(existing);
+
+        boolean isPost = postOrComment.equals("post");
+        System.out.println("@@@");
+        System.out.println(postOrComment);
+        System.out.println("@@@");
+
         if (existing.isPresent()) {
             likeRepository.delete(existing.get());
-            if (postOrComment.equals("post")) {
+            if (isPost) {
+                System.out.println("###");
                 postRepository.decrementLikeCount(postId);
+                System.out.println("###");
             } else {
+                System.out.println("!!!");
                 commentRepository.decrementLikeCount(postId);
+                System.out.println("!!!");
             }
             return false;
         } else {
@@ -41,10 +52,15 @@ public class LikeService {
                     .createdAt(LocalDateTime.now())
                     .build());
 
-            if (postOrComment.equals("post")) {
+            if (isPost) {
+                System.out.println("^^^");
                 postRepository.incrementLikeCount(postId);
+                System.out.println(postId);
+                System.out.println("^^^");
             } else {
+                System.out.println("***");
                 commentRepository.incrementLikeCount(postId);
+                System.out.println("***");
             }
             return true;
         }
