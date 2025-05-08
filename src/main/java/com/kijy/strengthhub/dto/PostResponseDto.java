@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 public class PostResponseDto {
     private Long id;
-    private String writerId;
+    private Long writerId;
     private String name;
     private String content;
     private String category;

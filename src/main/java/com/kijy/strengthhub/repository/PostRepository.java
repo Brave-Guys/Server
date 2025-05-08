@@ -10,9 +10,9 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByCategoryOrderByCreateDateDesc(String category);
-    List<Post> findByWriterIdOrderByCreateDateDesc(String writerId);
+    List<Post> findByWriterIdOrderByCreateDateDesc(Long writerId);
     Page<Post> findByCategory(String category, Pageable pageable);
-    Page<Post> findByWriterId(String writerId, Pageable pageable);
-    Page<Post> findByCategoryAndWriterId(String category, String writerId, Pageable pageable);
+    Page<Post> findByWriterId(Long writerId, Pageable pageable);
+    Page<Post> findByCategoryAndWriterId(String category, Long writerId, Pageable pageable);
 
 }

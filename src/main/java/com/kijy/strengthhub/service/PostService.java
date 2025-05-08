@@ -40,7 +40,7 @@ public class PostService {
 
         // Post 생성
         Post post = Post.builder()
-                .writerId(user.getId()) // ✅ Long
+                .writerId(user.getId())
                 .name(dto.getName())
                 .content(dto.getContent())
                 .category(dto.getCategory())
@@ -85,15 +85,15 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public Page<Post> getPaginatedPosts(int page, int size, String category, String userId) {
+    public Page<Post> getPaginatedPosts(int page, int size, String category, Long writerId) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createDate"));
 
-        if (category != null && userId != null) {
-            return postRepository.findByCategoryAndWriterId(category, userId, pageable);
+        if (category != null && writerId != null) {
+            return postRepository.findByCategoryAndWriterId(category, writerId, pageable);
         } else if (category != null) {
             return postRepository.findByCategory(category, pageable);
-        } else if (userId != null) {
-            return postRepository.findByWriterId(userId, pageable);
+        } else if (writerId != null) {
+            return postRepository.findByWriterId(writerId, pageable);
         } else {
             return postRepository.findAll(pageable);
         }
@@ -111,7 +111,7 @@ public class PostService {
             // 필요시 로깅
         }
 
-        String nickname = userRepository.findByUserId(post.getWriterId())
+        String nickname = userRepository.findById(post.getWriterId())
                 .map(User::getName)
                 .orElse("알 수 없음");
 
