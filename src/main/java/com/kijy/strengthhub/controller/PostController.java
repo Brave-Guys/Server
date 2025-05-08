@@ -33,8 +33,10 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Post> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(postService.findById(id));
+    public ResponseEntity<PostResponseDto> getById(@PathVariable Long id) {
+        Post post = postService.findById(id);
+        PostResponseDto dto = postService.toResponseDto(post); // 닉네임 포함된 DTO 생성
+        return ResponseEntity.ok(dto);
     }
 
     @PutMapping("/{id}")
