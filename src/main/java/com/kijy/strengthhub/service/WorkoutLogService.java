@@ -76,7 +76,9 @@ public class WorkoutLogService {
 
     public WorkoutLog update(Long id, WorkoutLogRequestDto dto) {
         WorkoutLog log = workoutLogRepository.findById(id).orElseThrow();
-        ZonedDateTime zdt = ZonedDateTime.parse(dto.getDate());
+
+        LocalDate localDate = LocalDate.parse(dto.getDate());
+        ZonedDateTime zdt = localDate.atTime(9, 0).atZone(ZoneId.of("Asia/Seoul"));
         Date parsedDate = Date.from(zdt.toInstant());
 
         log.setName(dto.getName());
@@ -88,6 +90,7 @@ public class WorkoutLogService {
         log.setWeight(dto.getWeight());
         log.setExerciseType(dto.getExerciseType());
         log.setPart(dto.getPart());
+
         return workoutLogRepository.save(log);
     }
 
