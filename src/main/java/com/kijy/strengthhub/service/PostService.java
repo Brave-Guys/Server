@@ -6,7 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kijy.strengthhub.dto.PostRequestDto;
 import com.kijy.strengthhub.dto.PostResponseDto;
 import com.kijy.strengthhub.entity.Post;
+import com.kijy.strengthhub.entity.User;
 import com.kijy.strengthhub.repository.PostRepository;
+import com.kijy.strengthhub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,19 +24,23 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     public Post create(PostRequestDto dto) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String imageUrlsJson = null;
+        User user = userRepository.findById(dto.getWriterId())
+                .orElseThrow(() -> new RuntimeException("사용자 없음"));
 
+        // 이미지 JSON 변환
+        String imageUrlsJson = "";
         try {
-            imageUrlsJson = objectMapper.writeValueAsString(dto.getImageUrls()); // List → JSON 문자열
+            imageUrlsJson = new ObjectMapper().writeValueAsString(dto.getImageUrls());
         } catch (JsonProcessingException e) {
             throw new RuntimeException("imageUrls 변환 실패", e);
         }
 
+        // Post 생성
         Post post = Post.builder()
-                .writerId(dto.getWriterId())
+                .writerId(user.getId()) // ✅ Long
                 .name(dto.getName())
                 .content(dto.getContent())
                 .category(dto.getCategory())
@@ -102,8 +108,12 @@ public class PostService {
                 imageUrls = mapper.readValue(post.getImageUrls(), new TypeReference<>() {});
             }
         } catch (Exception e) {
-            // 로깅만 해도 됨
+            // 필요시 로깅
         }
+
+        String nickname = userRepository.findByUserId(post.getWriterId())
+                .map(User::getName)
+                .orElse("알 수 없음");
 
         return PostResponseDto.builder()
                 .id(post.getId())
@@ -114,7 +124,8 @@ public class PostService {
                 .imageUrls(imageUrls)
                 .likeCount(post.getLikeCount())
                 .commentCount(post.getCommentCount())
-                .nickname("닉네임 자리") // 추후 유저 조인 시 갱신
+                .nickname(nickname)
                 .build();
     }
+
 }

@@ -18,7 +18,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long writerId;
+    private Long writerId; // ✅ 이제 Long
 
     private String name;
     private String content;

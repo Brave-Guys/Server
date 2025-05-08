@@ -16,3 +16,4 @@ public class PostRequestDto {
     private String category;
     private List<String> imageUrls;
 }
+
