@@ -109,34 +109,34 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    public List<PostResponseDto> searchPosts(String query) {
+        List<Post> posts = postRepository.findByNameContainingIgnoreCaseOrContentContainingIgnoreCase(query, query);
+        return posts.stream().map(this::toResponseDto).collect(Collectors.toList());
+    }
     public PostResponseDto toResponseDto(Post post) {
-        ObjectMapper mapper = new ObjectMapper();
-        List<String> imageUrls = List.of();
-
-        try {
-            if (post.getImageUrls() != null) {
-                imageUrls = mapper.readValue(post.getImageUrls(), new TypeReference<>() {});
-            }
-        } catch (Exception e) {
-            // 필요시 로깅
-        }
-
         String nickname = userRepository.findById(post.getWriterId())
                 .map(User::getName)
                 .orElse("알 수 없음");
 
+        List<String> imageUrls = List.of();
+        try {
+            if (post.getImageUrls() != null) {
+                ObjectMapper mapper = new ObjectMapper();
+                imageUrls = mapper.readValue(post.getImageUrls(), new TypeReference<>() {});
+            }
+        } catch (Exception ignored) {}
+
         return PostResponseDto.builder()
                 .id(post.getId())
                 .writerId(post.getWriterId())
-                .nickname(nickname)
                 .name(post.getName())
                 .content(post.getContent())
                 .category(post.getCategory())
                 .imageUrls(imageUrls)
                 .likes(post.getLikes())
                 .commentCount(post.getCommentCount())
+                .nickname(nickname)
                 .createDate(post.getCreateDate())
-                .updatedAt(post.getUpdatedAt())
                 .build();
     }
 

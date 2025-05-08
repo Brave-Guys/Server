@@ -75,4 +75,14 @@ public class PostController {
         return ResponseEntity.ok(popularPosts);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<?> searchPosts(@RequestParam("q") String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "검색어가 필요합니다."));
+        }
+
+        List<PostResponseDto> results = postService.searchPosts(query);
+        return ResponseEntity.ok(results);
+    }
+
 }

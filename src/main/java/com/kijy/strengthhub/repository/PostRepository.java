@@ -30,4 +30,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("SELECT p FROM Post p WHERE p.category <> '공지' ORDER BY p.likes DESC")
     List<Post> findTop3ByLikeCountDescExcludingNotice(Pageable pageable);
+
+    List<Post> findByNameContainingIgnoreCaseOrContentContainingIgnoreCase(String name, String content);
 }
