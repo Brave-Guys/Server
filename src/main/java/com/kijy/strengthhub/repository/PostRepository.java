@@ -27,4 +27,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Transactional
     @Query("UPDATE Post p SET p.likes = p.likes - 1 WHERE p.id = :id")
     void decrementLikeCount(@Param("id") Long id);
+
+    @Query("SELECT p FROM Post p WHERE p.category <> '공지' ORDER BY p.likes DESC")
+    List<Post> findTop3ByLikeCountDescExcludingNotice(Pageable pageable);
 }

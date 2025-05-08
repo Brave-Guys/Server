@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -97,6 +98,15 @@ public class PostService {
         } else {
             return postRepository.findAll(pageable);
         }
+    }
+
+    public List<PostResponseDto> getTop3PopularPosts() {
+        Pageable pageable = PageRequest.of(0, 3);
+        List<Post> posts = postRepository.findTop3ByLikeCountDescExcludingNotice(pageable);
+
+        return posts.stream()
+                .map(this::toResponseDto)
+                .collect(Collectors.toList());
     }
 
     public PostResponseDto toResponseDto(Post post) {
