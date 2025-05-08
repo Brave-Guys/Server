@@ -13,27 +13,26 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/posts/{postId}/comments")
 public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping
+    @GetMapping("/posts/{postId}/comments")
     public ResponseEntity<List<CommentResponseDto>> getComments(@PathVariable Long postId) {
         return ResponseEntity.ok(commentService.getComments(postId));
     }
 
-    @PostMapping
+    @PostMapping("/posts/{postId}/comments")
     public ResponseEntity<Comment> addComment(@PathVariable Long postId, @RequestBody CommentRequestDto dto) {
         return ResponseEntity.ok(commentService.addComment(postId, dto));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/comments/{id}")
     public ResponseEntity<Comment> updateComment(@PathVariable Long id, @RequestBody Map<String, String> body) {
         return ResponseEntity.ok(commentService.updateComment(id, body.get("content")));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/comments/{id}")
     public ResponseEntity<?> deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
         return ResponseEntity.ok(Map.of("message", "댓글 삭제 완료"));
