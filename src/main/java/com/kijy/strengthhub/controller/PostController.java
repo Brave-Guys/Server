@@ -25,8 +25,11 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Post>> getAll() {
-        return ResponseEntity.ok(postService.findAll());
+    public ResponseEntity<List<PostResponseDto>> getAll() {
+        List<PostResponseDto> result = postService.findAll().stream()
+                .map(postService::toResponseDto)
+                .toList();
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")

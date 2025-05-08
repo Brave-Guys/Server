@@ -118,13 +118,15 @@ public class PostService {
         return PostResponseDto.builder()
                 .id(post.getId())
                 .writerId(post.getWriterId())
+                .nickname(nickname)
                 .name(post.getName())
                 .content(post.getContent())
                 .category(post.getCategory())
                 .imageUrls(imageUrls)
                 .likeCount(post.getLikeCount())
                 .commentCount(post.getCommentCount())
-                .nickname(nickname)
+                .createDate(post.getCreateDate())
+                .updatedAt(post.getUpdatedAt())
                 .build();
     }
 
