@@ -1,0 +1,6 @@
+.gradle
+build/
+!build/libs/strengthhub-0.0.1-SNAPSHOT.jar
+.idea
+*.iml
+*.log
