@@ -36,4 +36,12 @@ public class UserService {
                 .message("등록 완료")
                 .build();
     }
+
+    public void updateNickname(Long userId, String newNickname) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        user.setName(newNickname);
+        userRepository.save(user);
+    }
+
 }
