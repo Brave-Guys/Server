@@ -9,7 +9,7 @@ public class ChallengeResponseDto {
     private String name;
     private String description;
     private String videoUrl;
-    private String writerId;
+    private Long writerId;
     private String nickname;
     private Date createdAt;
     private Date endDate;

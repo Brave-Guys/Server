@@ -19,7 +19,7 @@ public class Challenge {
     private String description;
     private String videoUrl;
 
-    private Long writerId; // user_id 저장
+    private String writerId; // user_id 저장
     private Date createdAt;
     private Date endDate;
 }

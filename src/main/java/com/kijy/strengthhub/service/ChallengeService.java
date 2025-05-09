@@ -43,7 +43,7 @@ public class ChallengeService {
     }
 
     private ChallengeResponseDto toDto(Challenge c) {
-        String nickname = userRepository.findByUserId(c.getWriterId())
+        String nickname = userRepository.findById(c.getWriterId())
                 .map(User::getName).orElse("익명");
 
         return ChallengeResponseDto.builder()
