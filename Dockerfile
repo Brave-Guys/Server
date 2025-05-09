@@ -1,5 +1,12 @@
+### 1단계: Gradle 빌드
+FROM gradle:8.3-jdk17 AS builder
+WORKDIR /build
+COPY --chown=gradle:gradle . .
+RUN gradle build -x test
+
+### 2단계: 실행용 이미지
 FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY build/libs/strengthhub-0.0.1-SNAPSHOT.jar app.jar
-EXPOSE 8081
+COPY --from=builder /build/build/libs/strengthhub-0.0.1-SNAPSHOT.jar app.jar
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
