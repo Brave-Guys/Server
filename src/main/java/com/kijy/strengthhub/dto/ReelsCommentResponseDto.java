@@ -3,16 +3,19 @@ package com.kijy.strengthhub.dto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
-@Getter @Builder
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReelsCommentResponseDto {
-    private String rcommentId;
+    private Long rcommentId;
     private String reelsId;
     private Long writerId;
     private String nickname;
     private String profileImgUrl;
-    private String parentId;
     private String content;
-    private int likes;
+    private Long parentId;
     private LocalDateTime writeDate;
 }

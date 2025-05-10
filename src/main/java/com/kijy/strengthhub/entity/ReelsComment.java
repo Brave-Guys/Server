@@ -13,13 +13,14 @@ import java.util.UUID;
 public class ReelsComment {
 
     @Id
-    private String rcommentId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Long이면 이 방식이 적절
+    private Long rcommentId;
 
     private String reelsId;
 
     private Long writerId;
 
-    private String parentId; // null이면 원댓글
+    private Long parentId; // String → Long으로 수정
 
     @Column(columnDefinition = "TEXT")
     private String content;
@@ -30,9 +31,6 @@ public class ReelsComment {
 
     @PrePersist
     public void prePersist() {
-        if (this.rcommentId == null) {
-            this.rcommentId = UUID.randomUUID().toString();
-        }
         if (this.writeDate == null) {
             this.writeDate = LocalDateTime.now();
         }
