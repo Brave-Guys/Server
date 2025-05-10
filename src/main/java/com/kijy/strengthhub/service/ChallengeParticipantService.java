@@ -6,6 +6,7 @@ import com.kijy.strengthhub.entity.ChallengeParticipant;
 import com.kijy.strengthhub.entity.User;
 import com.kijy.strengthhub.repository.ChallengeParticipantRepository;
 import com.kijy.strengthhub.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +54,7 @@ public class ChallengeParticipantService {
         return repository.existsByChallengeIdAndWriterId(challengeId, writerId);
     }
 
+    @Transactional
     public void delete(Long challengeId, Long writerId) {
         repository.deleteByChallengeIdAndWriterId(challengeId, writerId);
     }
