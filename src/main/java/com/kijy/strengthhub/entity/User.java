@@ -28,4 +28,7 @@ public class User {
     private String role; // USER or ADMIN
 
     private String userPlanType; // BEGINNER, ...
+
+    @Column(name = "img_url")
+    private String imgUrl; // 프로필 이미지 URL
 }

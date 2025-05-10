@@ -27,6 +27,7 @@ public class UserService {
                 .email(dto.getEmail())
                 .role("USER")
                 .userPlanType("BEGINNER")
+                .imgUrl(null)
                 .build();
 
         User saved = userRepository.save(user);
