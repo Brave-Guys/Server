@@ -4,6 +4,7 @@ import com.kijy.strengthhub.dto.RegisterRequestDto;
 import com.kijy.strengthhub.dto.RegisterResponseDto;
 import com.kijy.strengthhub.entity.User;
 import com.kijy.strengthhub.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,5 +45,13 @@ public class UserService {
         user.setName(newNickname);
         userRepository.save(user);
     }
+
+    @Transactional
+    public void updateProfileImage(Long id, String imgUrl) {
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
+        user.setImgUrl(imgUrl);
+        userRepository.save(user);
+    }
+
 
 }

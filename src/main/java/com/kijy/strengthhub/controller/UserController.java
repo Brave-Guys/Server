@@ -24,4 +24,14 @@ public class UserController {
         userService.updateNickname(userId, nickname);
         return ResponseEntity.ok(Map.of("message", "닉네임 변경 완료"));
     }
+
+    @PutMapping("/{id}/image")
+    public ResponseEntity<?> updateProfileImage(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> body) {
+        String imgUrl = body.get("imgUrl");
+        userService.updateProfileImage(id, imgUrl);
+        return ResponseEntity.ok().build();
+    }
+
 }
