@@ -34,14 +34,15 @@ public class ChallengeParticipantService {
     public List<ChallengeParticipantResponseDto> getByChallenge(Long challengeId) {
         List<ChallengeParticipant> list = repository.findByChallengeIdOrderByWriteDateAsc(challengeId);
         return list.stream().map(p -> {
-            String nickname = userRepository.findById(p.getWriterId())
-                    .map(User::getName)
-                    .orElse("알 수 없음");
+            User user = userRepository.findById(p.getWriterId()).orElse(null);
+            String nickname = user != null ? user.getName() : "알 수 없음";
+            String profileImgUrl = user != null ? user.getImgUrl() : null;
 
             return ChallengeParticipantResponseDto.builder()
                     .id(p.getId())
                     .challengeId(p.getChallengeId())
                     .writerId(p.getWriterId())
+                    .profileImgUrl(profileImgUrl)
                     .nickname(nickname)
                     .content(p.getContent())
                     .videoUrl(p.getVideoUrl())

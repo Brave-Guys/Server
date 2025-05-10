@@ -16,4 +16,5 @@ public class ChallengeParticipantResponseDto {
     private String content;
     private String videoUrl;
     private Date writeDate;
+    private String profileImgUrl;
 }
