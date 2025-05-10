@@ -13,7 +13,7 @@ import java.util.UUID;
 public class ReelsComment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Long이면 이 방식이 적절
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rcommentId;
 
     private String reelsId;

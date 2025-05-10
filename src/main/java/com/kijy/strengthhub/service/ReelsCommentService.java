@@ -6,6 +6,7 @@ import com.kijy.strengthhub.entity.ReelsComment;
 import com.kijy.strengthhub.entity.User;
 import com.kijy.strengthhub.repository.ReelsCommentRepository;
 import com.kijy.strengthhub.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +46,10 @@ public class ReelsCommentService {
                     .writeDate(c.getWriteDate())
                     .build();
         }).toList();
+    }
+
+    @Transactional
+    public void deleteComment(Long rcommentId) {
+        reelsCommentRepository.deleteByrcommentId(rcommentId);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/reels_comments")
@@ -28,4 +29,9 @@ public class ReelsCommentController {
         return ResponseEntity.ok(comments);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> deleteReelsComment(@PathVariable Long id) {
+        reelsCommentService.deleteComment(id);
+        return ResponseEntity.ok(Map.of("message", "댓글 삭제 완료"));
+    }
 }

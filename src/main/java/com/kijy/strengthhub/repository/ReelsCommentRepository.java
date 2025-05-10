@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ReelsCommentRepository extends JpaRepository<ReelsComment, String> {
     List<ReelsComment> findByReelsIdOrderByWriteDateAsc(String reelsId);
+
+    void deleteByrcommentId(Long rcommentId);
 }
