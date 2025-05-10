@@ -43,4 +43,11 @@ public class ChallengeParticipantController {
         service.delete(challengeId, userId);
         return ResponseEntity.ok(Map.of("message", "수행 내역 삭제 완료"));
     }
+
+    @GetMapping("/{challengeId}/participants/{writerId}")
+    public ResponseEntity<ChallengeParticipantResponseDto> getParticipantDetail(@PathVariable Long challengeId,
+                                                                                @PathVariable Long writerId) {
+        ChallengeParticipantResponseDto response = service.getOne(challengeId, writerId);
+        return ResponseEntity.ok(response);
+    }
 }

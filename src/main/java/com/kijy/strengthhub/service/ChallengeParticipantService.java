@@ -59,4 +59,24 @@ public class ChallengeParticipantService {
     public void delete(Long challengeId, Long writerId) {
         repository.deleteByChallengeIdAndWriterId(challengeId, writerId);
     }
+
+    public ChallengeParticipantResponseDto getOne(Long challengeId, Long writerId) {
+        ChallengeParticipant p = repository.findByChallengeIdAndWriterId(challengeId, writerId)
+                .orElseThrow(() -> new RuntimeException("참가자를 찾을 수 없습니다."));
+
+        User user = userRepository.findById(p.getWriterId()).orElse(null);
+        String nickname = user != null ? user.getName() : "알 수 없음";
+        String profileImgUrl = user != null ? user.getImgUrl() : null;
+
+        return ChallengeParticipantResponseDto.builder()
+                .id(p.getId())
+                .challengeId(p.getChallengeId())
+                .writerId(p.getWriterId())
+                .profileImgUrl(profileImgUrl)
+                .nickname(nickname)
+                .content(p.getContent())
+                .videoUrl(p.getVideoUrl())
+                .writeDate(p.getWriteDate())
+                .build();
+    }
 }
