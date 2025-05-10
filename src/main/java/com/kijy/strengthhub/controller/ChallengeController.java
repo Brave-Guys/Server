@@ -17,7 +17,7 @@ public class ChallengeController {
     private final ChallengeService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ChallengeRequestDto dto) {
+    public ResponseEntity<ChallengeResponseDto> create(@RequestBody ChallengeRequestDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(dto));
     }
 
@@ -30,4 +30,16 @@ public class ChallengeController {
     public ResponseEntity<ChallengeResponseDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getById(id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ChallengeResponseDto> update(@PathVariable Long id, @RequestBody ChallengeRequestDto dto) {
+        return ResponseEntity.ok(service.update(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
+

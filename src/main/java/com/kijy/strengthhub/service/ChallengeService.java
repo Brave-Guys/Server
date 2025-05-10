@@ -15,46 +15,68 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ChallengeService {
+
     private final ChallengeRepository challengeRepository;
     private final UserRepository userRepository;
 
     public ChallengeResponseDto save(ChallengeRequestDto dto) {
+        Date now = new Date();
+
         Challenge challenge = Challenge.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .videoUrl(dto.getVideoUrl())
                 .writerId(dto.getWriterId())
-                .createdAt(new Date())
-                .endDate(new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000L))
+                .createdAt(now)
+                .endDate(new Date(now.getTime() + 7L * 24 * 60 * 60 * 1000))
                 .build();
 
-        Challenge saved = challengeRepository.save(challenge);
-        return toDto(saved);
+        challengeRepository.save(challenge);
+        String nickname = userRepository.findById(dto.getWriterId())
+                .map(User::getName)
+                .orElse("알 수 없음");
+
+        return ChallengeResponseDto.from(challenge, nickname);
     }
 
     public ChallengeResponseDto getById(Long id) {
-        Challenge challenge = challengeRepository.findById(id).orElseThrow();
-        return toDto(challenge);
+        Challenge challenge = challengeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("챌린지를 찾을 수 없습니다."));
+
+        String nickname = userRepository.findById(challenge.getWriterId())
+                .map(User::getName)
+                .orElse("알 수 없음");
+
+        return ChallengeResponseDto.from(challenge, nickname);
     }
 
     public List<ChallengeResponseDto> getAll() {
-        return challengeRepository.findAllByOrderByCreatedAtDesc()
-                .stream().map(this::toDto).toList();
+        return challengeRepository.findAll().stream().map(challenge -> {
+            String nickname = userRepository.findById(challenge.getWriterId())
+                    .map(User::getName)
+                    .orElse("알 수 없음");
+            return ChallengeResponseDto.from(challenge, nickname);
+        }).toList();
     }
 
-    private ChallengeResponseDto toDto(Challenge c) {
-        String nickname = userRepository.findById(c.getWriterId())
-                .map(User::getName).orElse("익명");
+    public ChallengeResponseDto update(Long id, ChallengeRequestDto dto) {
+        Challenge challenge = challengeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("챌린지를 찾을 수 없습니다."));
 
-        return ChallengeResponseDto.builder()
-                .id(c.getId())
-                .name(c.getName())
-                .description(c.getDescription())
-                .videoUrl(c.getVideoUrl())
-                .writerId(c.getWriterId())
-                .nickname(nickname)
-                .createdAt(c.getCreatedAt())
-                .endDate(c.getEndDate())
-                .build();
+        challenge.setName(dto.getName());
+        challenge.setDescription(dto.getDescription());
+        challenge.setVideoUrl(dto.getVideoUrl());
+        String nickname = userRepository.findById(challenge.getWriterId())
+                .map(User::getName)
+                .orElse("알 수 없음");
+
+        return ChallengeResponseDto.from(challengeRepository.save(challenge), nickname);
+    }
+
+    public void delete(Long id) {
+        if (!challengeRepository.existsById(id)) {
+            throw new RuntimeException("존재하지 않는 챌린지입니다.");
+        }
+        challengeRepository.deleteById(id);
     }
 }
