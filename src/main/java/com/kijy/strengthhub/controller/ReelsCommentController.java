@@ -34,4 +34,11 @@ public class ReelsCommentController {
         reelsCommentService.deleteComment(id);
         return ResponseEntity.ok(Map.of("message", "댓글 삭제 완료"));
     }
+
+    @PutMapping("/{rcommentId}")
+    public ResponseEntity<?> updateComment(@PathVariable Long rcommentId, @RequestBody Map<String, String> body) {
+        String newContent = body.get("content");
+        reelsCommentService.updateComment(rcommentId, newContent);
+        return ResponseEntity.ok(Map.of("message", "댓글 수정 완료"));
+    }
 }

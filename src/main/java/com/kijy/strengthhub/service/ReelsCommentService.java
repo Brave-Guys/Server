@@ -52,4 +52,12 @@ public class ReelsCommentService {
     public void deleteComment(Long rcommentId) {
         reelsCommentRepository.deleteByrcommentId(rcommentId);
     }
+
+    @Transactional
+    public void updateComment(Long rcommentId, String newContent) {
+        ReelsComment comment = reelsCommentRepository.findById(rcommentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+        comment.setContent(newContent);
+    }
+
 }
