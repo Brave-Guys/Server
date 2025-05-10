@@ -24,12 +24,16 @@ public class CommentService {
     public List<CommentResponseDto> getComments(Long postId) {
         return commentRepository.findByPostIdOrderByWriteDateAsc(postId).stream()
                 .map(comment -> {
-                    String nickname = userRepository.findById(comment.getWriterId())
-                            .map(User::getName).orElse("익명");
+                    User user = userRepository.findById(comment.getWriterId()).orElse(null);
+
+                    String nickname = user != null ? user.getName() : "익명";
+                    String profileImgUrl = user != null ? user.getImgUrl() : null;
+
                     return CommentResponseDto.builder()
                             .id(comment.getId())
                             .writerId(comment.getWriterId())
                             .nickname(nickname)
+                            .profileImgUrl(profileImgUrl)
                             .content(comment.getContent())
                             .parentId(comment.getParentId())
                             .likes(comment.getLikes())
@@ -38,6 +42,7 @@ public class CommentService {
                             .build();
                 }).toList();
     }
+
 
     public Comment addComment(Long postId, CommentRequestDto dto) {
         Comment comment = Comment.builder()

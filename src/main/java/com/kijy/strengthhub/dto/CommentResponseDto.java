@@ -18,4 +18,5 @@ public class CommentResponseDto {
     private int likes;
     private Date writeDate;
     private Date updatedAt;
+    private String profileImgUrl;
 }
