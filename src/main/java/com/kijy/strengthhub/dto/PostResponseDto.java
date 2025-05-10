@@ -22,4 +22,5 @@ public class PostResponseDto {
     private int commentCount;
     private Date createDate;
     private Date updatedAt;
+    private String profileImgUrl;
 }

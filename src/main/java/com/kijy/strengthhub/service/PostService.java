@@ -114,9 +114,10 @@ public class PostService {
         return posts.stream().map(this::toResponseDto).collect(Collectors.toList());
     }
     public PostResponseDto toResponseDto(Post post) {
-        String nickname = userRepository.findById(post.getWriterId())
-                .map(User::getName)
-                .orElse("알 수 없음");
+        User user = userRepository.findById(post.getWriterId()).orElse(null);
+
+        String nickname = user != null ? user.getName() : "알 수 없음";
+        String profileImgUrl = user != null ? user.getImgUrl() : null;
 
         List<String> imageUrls = List.of();
         try {
@@ -136,8 +137,10 @@ public class PostService {
                 .likes(post.getLikes())
                 .commentCount(post.getCommentCount())
                 .nickname(nickname)
+                .profileImgUrl(profileImgUrl)
                 .createDate(post.getCreateDate())
                 .build();
     }
+
 
 }
