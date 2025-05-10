@@ -1,6 +1,7 @@
 package com.kijy.strengthhub.controller;
 
 import com.kijy.strengthhub.dto.ChallengeParticipantRequestDto;
+import com.kijy.strengthhub.dto.ChallengeParticipantResponseDto;
 import com.kijy.strengthhub.entity.ChallengeParticipant;
 import com.kijy.strengthhub.service.ChallengeParticipantService;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,8 @@ public class ChallengeParticipantController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<List<ChallengeParticipant>> getParticipants(@PathVariable("id") Long challengeId) {
+    @GetMapping("/{challengeId}")
+    public ResponseEntity<List<ChallengeParticipantResponseDto>> getParticipants(@PathVariable Long challengeId) {
         return ResponseEntity.ok(service.getByChallenge(challengeId));
     }
 

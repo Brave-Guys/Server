@@ -1,8 +1,11 @@
 package com.kijy.strengthhub.service;
 
 import com.kijy.strengthhub.dto.ChallengeParticipantRequestDto;
+import com.kijy.strengthhub.dto.ChallengeParticipantResponseDto;
 import com.kijy.strengthhub.entity.ChallengeParticipant;
+import com.kijy.strengthhub.entity.User;
 import com.kijy.strengthhub.repository.ChallengeParticipantRepository;
+import com.kijy.strengthhub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,7 @@ import java.util.List;
 public class ChallengeParticipantService {
 
     private final ChallengeParticipantRepository repository;
+    private final UserRepository userRepository;
 
     public ChallengeParticipant create(ChallengeParticipantRequestDto dto) {
         ChallengeParticipant participant = ChallengeParticipant.builder()
@@ -26,8 +30,23 @@ public class ChallengeParticipantService {
         return repository.save(participant);
     }
 
-    public List<ChallengeParticipant> getByChallenge(Long challengeId) {
-        return repository.findByChallengeIdOrderByWriteDateAsc(challengeId);
+    public List<ChallengeParticipantResponseDto> getByChallenge(Long challengeId) {
+        List<ChallengeParticipant> list = repository.findByChallengeIdOrderByWriteDateAsc(challengeId);
+        return list.stream().map(p -> {
+            String nickname = userRepository.findById(p.getWriterId())
+                    .map(User::getName)
+                    .orElse("알 수 없음");
+
+            return ChallengeParticipantResponseDto.builder()
+                    .id(p.getId())
+                    .challengeId(p.getChallengeId())
+                    .writerId(p.getWriterId())
+                    .nickname(nickname)
+                    .content(p.getContent())
+                    .videoUrl(p.getVideoUrl())
+                    .writeDate(p.getWriteDate())
+                    .build();
+        }).toList();
     }
 
     public boolean checkParticipation(Long challengeId, Long writerId) {
