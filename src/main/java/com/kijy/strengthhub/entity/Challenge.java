@@ -11,8 +11,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class Challenge {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
