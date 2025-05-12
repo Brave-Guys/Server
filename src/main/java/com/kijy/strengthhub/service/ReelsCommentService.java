@@ -44,6 +44,7 @@ public class ReelsCommentService {
                     .content(c.getContent())
                     .parentId(c.getParentId())
                     .writeDate(c.getWriteDate())
+                    .likes(c.getLikes())
                     .build();
         }).toList();
     }

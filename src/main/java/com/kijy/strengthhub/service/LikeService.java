@@ -4,6 +4,7 @@ import com.kijy.strengthhub.entity.Like;
 import com.kijy.strengthhub.repository.CommentRepository;
 import com.kijy.strengthhub.repository.LikeRepository;
 import com.kijy.strengthhub.repository.PostRepository;
+import com.kijy.strengthhub.repository.ReelsCommentRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final ReelsCommentRepository reelsCommentRepository;
 
     @Transactional
     public boolean toggleLike(String userId, Long postId, String postType, String postOrComment) {
@@ -25,13 +27,24 @@ public class LikeService {
                 userId, postId, postType, postOrComment);
 
         boolean isPost = postOrComment.equals("post");
+        boolean isComment = postOrComment.equals("comment");
+        boolean isChallenge = postType.equals("challenge");
+
+        System.out.println("!!!");
+        System.out.println(isChallenge);
+        System.out.println("!!!");
 
         if (existing.isPresent()) {
             likeRepository.delete(existing.get());
             if (isPost) {
-                postRepository.decrementLikeCount(postId);
-            } else {
-                commentRepository.decrementLikeCount(postId);
+                if (isComment) {
+                    commentRepository.decrementLikeCount(postId);
+                } else {
+                    postRepository.decrementLikeCount(postId);
+                }
+            }
+             else if (isChallenge) {
+                reelsCommentRepository.decrementLikeCount(postId);
             }
             return false;
         } else {
@@ -44,10 +57,14 @@ public class LikeService {
                     .build());
 
             if (isPost) {
-                postRepository.incrementLikeCount(postId);
-
-            } else {
-                commentRepository.incrementLikeCount(postId);
+                if (isComment) {
+                    commentRepository.incrementLikeCount(postId);
+                } else {
+                    postRepository.incrementLikeCount(postId);
+                }
+            }
+            else if (isChallenge){
+                reelsCommentRepository.incrementLikeCount(postId);
             }
             return true;
         }

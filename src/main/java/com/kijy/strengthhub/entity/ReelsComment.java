@@ -20,7 +20,7 @@ public class ReelsComment {
 
     private Long writerId;
 
-    private Long parentId; // String → Long으로 수정
+    private Long parentId;
 
     @Column(columnDefinition = "TEXT")
     private String content;

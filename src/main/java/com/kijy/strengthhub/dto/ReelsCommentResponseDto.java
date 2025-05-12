@@ -18,4 +18,5 @@ public class ReelsCommentResponseDto {
     private String content;
     private Long parentId;
     private LocalDateTime writeDate;
+    private int likes;
 }
