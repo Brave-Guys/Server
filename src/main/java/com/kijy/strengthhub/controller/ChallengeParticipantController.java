@@ -50,4 +50,9 @@ public class ChallengeParticipantController {
         ChallengeParticipantResponseDto response = service.getOne(challengeId, writerId);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<ChallengeParticipantResponseDto>> getMyChallenges(@RequestParam Long writerId) {
+        return ResponseEntity.ok(service.getByWriter(writerId));
+    }
 }

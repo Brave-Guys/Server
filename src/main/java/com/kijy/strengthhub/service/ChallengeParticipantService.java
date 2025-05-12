@@ -79,4 +79,24 @@ public class ChallengeParticipantService {
                 .writeDate(p.getWriteDate())
                 .build();
     }
+
+    public List<ChallengeParticipantResponseDto> getByWriter(Long writerId) {
+        List<ChallengeParticipant> list = repository.findByWriterIdOrderByWriteDateDesc(writerId);
+        return list.stream().map(p -> {
+            User user = userRepository.findById(p.getWriterId()).orElse(null);
+            String nickname = user != null ? user.getName() : "알 수 없음";
+            String profileImgUrl = user != null ? user.getImgUrl() : null;
+
+            return ChallengeParticipantResponseDto.builder()
+                    .id(p.getId())
+                    .challengeId(p.getChallengeId())
+                    .writerId(p.getWriterId())
+                    .nickname(nickname)
+                    .profileImgUrl(profileImgUrl)
+                    .content(p.getContent())
+                    .videoUrl(p.getVideoUrl())
+                    .writeDate(p.getWriteDate())
+                    .build();
+        }).toList();
+    }
 }

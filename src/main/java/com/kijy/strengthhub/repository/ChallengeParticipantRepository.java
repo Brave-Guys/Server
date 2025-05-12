@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface ChallengeParticipantRepository extends JpaRepository<ChallengeParticipant, Long> {
     List<ChallengeParticipant> findByChallengeIdOrderByWriteDateAsc(Long challengeId);
+    List<ChallengeParticipant> findByWriterIdOrderByWriteDateDesc(Long writerId);
     boolean existsByChallengeIdAndWriterId(Long challengeId, Long writerId);
 
     @Modifying
