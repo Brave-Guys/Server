@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -98,5 +99,15 @@ public class ChallengeParticipantService {
                     .writeDate(p.getWriteDate())
                     .build();
         }).toList();
+    }
+
+    public Optional<ChallengeParticipant> getRandomParticipant() {
+        List<ChallengeParticipant> participants = repository.findAllRandom();
+        if (participants.isEmpty()) {
+            return Optional.empty();
+        } else {
+            int randomIndex = (int) (Math.random() * participants.size());
+            return Optional.of(participants.get(randomIndex));
+        }
     }
 }

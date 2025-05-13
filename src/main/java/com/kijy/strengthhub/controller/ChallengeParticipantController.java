@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/challenge_participants")
@@ -54,5 +55,12 @@ public class ChallengeParticipantController {
     @GetMapping("/my")
     public ResponseEntity<List<ChallengeParticipantResponseDto>> getMyChallenges(@RequestParam Long writerId) {
         return ResponseEntity.ok(service.getByWriter(writerId));
+    }
+
+    @GetMapping("/random")
+    public ResponseEntity<ChallengeParticipant> getRandomParticipant() {
+        Optional<ChallengeParticipant> participant = service.getRandomParticipant();
+        return participant.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
