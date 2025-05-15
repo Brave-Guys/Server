@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -102,13 +103,12 @@ public class ChallengeParticipantService {
         }).toList();
     }
 
-    public Optional<ChallengeParticipant> getRandomParticipant() {
+    public List<ChallengeParticipant> getRandomParticipants() {
         List<ChallengeParticipant> participants = repository.findAllRandom();
-        if (participants.isEmpty()) {
-            return Optional.empty();
-        } else {
-            int randomIndex = (int) (Math.random() * participants.size());
-            return Optional.of(participants.get(randomIndex));
+        if (participants.size() <= 3) {
+            return participants;
         }
+        Collections.shuffle(participants);
+        return participants.subList(0, 3);
     }
 }

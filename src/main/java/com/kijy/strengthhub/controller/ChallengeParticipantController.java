@@ -58,9 +58,11 @@ public class ChallengeParticipantController {
     }
 
     @GetMapping("/random")
-    public ResponseEntity<ChallengeParticipant> getRandomParticipant() {
-        Optional<ChallengeParticipant> participant = service.getRandomParticipant();
-        return participant.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<List<ChallengeParticipant>> getRandomParticipants() {
+        List<ChallengeParticipant> participants = service.getRandomParticipants();
+        if (participants.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(participants);
     }
 }
