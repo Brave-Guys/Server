@@ -45,10 +45,10 @@ public class ChallengeParticipantController {
         return ResponseEntity.ok(Map.of("message", "수행 내역 삭제 완료"));
     }
 
-    @GetMapping("/{challengeId}/participants/{writerId}")
+    @GetMapping("/{challengeId}/participants/{participantId}")
     public ResponseEntity<ChallengeParticipantResponseDto> getParticipantDetail(@PathVariable Long challengeId,
-                                                                                @PathVariable Long writerId) {
-        ChallengeParticipantResponseDto response = service.getOne(challengeId, writerId);
+                                                                                @PathVariable Long participantId) {
+        ChallengeParticipantResponseDto response = service.getOne(participantId);
         return ResponseEntity.ok(response);
     }
 

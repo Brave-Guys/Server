@@ -61,14 +61,14 @@ public class ChallengeParticipantService {
         repository.deleteByChallengeIdAndWriterId(challengeId, writerId);
     }
 
-    public ChallengeParticipantResponseDto getOne(Long challengeId, Long writerId) {
-        ChallengeParticipant p = repository.findByChallengeIdAndWriterId(challengeId, writerId)
+    public ChallengeParticipantResponseDto getOne(Long participantId) {
+        ChallengeParticipant p = repository.findById(participantId)
                 .orElseThrow(() -> new RuntimeException("참가자를 찾을 수 없습니다."));
 
         User user = userRepository.findById(p.getWriterId()).orElse(null);
         String nickname = user != null ? user.getName() : "알 수 없음";
         String profileImgUrl = user != null ? user.getImgUrl() : null;
-
+        
         return ChallengeParticipantResponseDto.builder()
                 .id(p.getId())
                 .challengeId(p.getChallengeId())
@@ -80,6 +80,7 @@ public class ChallengeParticipantService {
                 .writeDate(p.getWriteDate())
                 .build();
     }
+
 
     public List<ChallengeParticipantResponseDto> getByWriter(Long writerId) {
         List<ChallengeParticipant> list = repository.findByWriterIdOrderByWriteDateDesc(writerId);
