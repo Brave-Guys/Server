@@ -103,12 +103,13 @@ public class ChallengeParticipantService {
         }).toList();
     }
 
-    public List<ChallengeParticipant> getRandomParticipants() {
+    public ChallengeParticipant getRandomParticipant() {
         List<ChallengeParticipant> participants = repository.findAllRandom();
-        if (participants.size() <= 3) {
-            return participants;
+        if (participants.isEmpty()) {
+            return null;
         }
+        // 랜덤으로 하나의 참가자를 선택
         Collections.shuffle(participants);
-        return participants.subList(0, 3);
+        return participants.get(0); // 첫 번째 참가자 반환
     }
 }

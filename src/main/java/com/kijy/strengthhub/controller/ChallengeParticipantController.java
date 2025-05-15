@@ -58,11 +58,11 @@ public class ChallengeParticipantController {
     }
 
     @GetMapping("/random")
-    public ResponseEntity<List<ChallengeParticipant>> getRandomParticipants() {
-        List<ChallengeParticipant> participants = service.getRandomParticipants();
-        if (participants.isEmpty()) {
+    public ResponseEntity<ChallengeParticipant> getRandomParticipant() {
+        ChallengeParticipant participant = service.getRandomParticipant();
+        if (participant == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(participants);
+        return ResponseEntity.ok(participant);
     }
 }
