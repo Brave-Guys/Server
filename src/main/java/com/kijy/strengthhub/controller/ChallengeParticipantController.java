@@ -2,6 +2,7 @@ package com.kijy.strengthhub.controller;
 
 import com.kijy.strengthhub.dto.ChallengeParticipantRequestDto;
 import com.kijy.strengthhub.dto.ChallengeParticipantResponseDto;
+import com.kijy.strengthhub.dto.ExcludeIdsRequest;
 import com.kijy.strengthhub.entity.ChallengeParticipant;
 import com.kijy.strengthhub.service.ChallengeParticipantService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/challenge_participants")
@@ -57,9 +57,9 @@ public class ChallengeParticipantController {
         return ResponseEntity.ok(service.getByWriter(writerId));
     }
 
-    @GetMapping("/random")
-    public ResponseEntity<ChallengeParticipant> getRandomParticipant() {
-        ChallengeParticipant participant = service.getRandomParticipant();
+    @PostMapping("/random")
+    public ResponseEntity<ChallengeParticipant> getRandomParticipant(@RequestBody ExcludeIdsRequest request) {
+        ChallengeParticipant participant = service.getRandomParticipantExcluding(request.getExcludeIds());
         if (participant == null) {
             return ResponseEntity.notFound().build();
         }

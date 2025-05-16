@@ -5,7 +5,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -26,6 +25,4 @@ public interface ChallengeParticipantRepository extends JpaRepository<ChallengeP
     @Query("SELECT c FROM ChallengeParticipant c ORDER BY FUNCTION('RAND')")
     List<ChallengeParticipant> findAllRandom();
 
-    @Query("SELECT p FROM ChallengeParticipant p WHERE p.id NOT IN (:excludeIds)")
-    List<ChallengeParticipant> findAllExcludingIds(@Param("excludeIds") List<Long> excludeIds);
 }

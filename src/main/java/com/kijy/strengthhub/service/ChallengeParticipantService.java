@@ -103,13 +103,10 @@ public class ChallengeParticipantService {
         }).toList();
     }
 
-    public ChallengeParticipant getRandomParticipant() {
-        List<ChallengeParticipant> participants = repository.findAllRandom();
-        if (participants.isEmpty()) {
-            return null;
-        }
-        // 랜덤으로 하나의 참가자를 선택
-        Collections.shuffle(participants);
-        return participants.get(0); // 첫 번째 참가자 반환
+    public ChallengeParticipant getRandomParticipantExcluding(List<Long> excludeIds) {
+        List<ChallengeParticipant> candidates = repository.findAllExcludingIds(excludeIds);
+        if (candidates.isEmpty()) return null;
+        Collections.shuffle(candidates);
+        return candidates.get(0);
     }
 }

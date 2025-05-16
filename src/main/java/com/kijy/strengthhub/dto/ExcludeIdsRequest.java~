@@ -1,0 +1,15 @@
+package com.kijy.strengthhub.dto;
+
+import java.util.List;
+
+public class ExcludeIdsRequest {
+    private List<Long> excludeIds; // ID가 Long인지 String인지 확인해서 맞춰줘
+
+    public List<Long> getExcludeIds() {
+        return excludeIds;
+    }
+
+    public void setExcludeIds(List<Long> excludeIds) {
+        this.excludeIds = excludeIds;
+    }
+}
