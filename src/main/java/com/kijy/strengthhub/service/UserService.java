@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -58,6 +59,10 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
         user.setRole(role);
         userRepository.save(user);
+    }
+
+    public List<User> getSeniorUsers() {
+        return userRepository.findByRole("SENIOR");
     }
 
 }

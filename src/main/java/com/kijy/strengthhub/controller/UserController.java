@@ -44,4 +44,9 @@ public class UserController {
         userService.updateUserRole(id, role);
         return ResponseEntity.ok(Map.of("message", "권한 변경 완료"));
     }
+
+    @GetMapping("/seniors")
+    public ResponseEntity<?> getSeniorUsers() {
+        return ResponseEntity.ok(userService.getSeniorUsers());
+    }
 }
