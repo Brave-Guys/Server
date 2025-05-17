@@ -20,6 +20,7 @@ public class MasterRequestService {
     @Transactional
     public MasterRequest saveRequest(MasterRequestDto dto) {
         MasterRequest request = new MasterRequest();
+        request.setUserId(dto.getUserId());
         request.setName(dto.getName());
         request.setPhone(dto.getPhone());
         request.setCareer(dto.getCareer());

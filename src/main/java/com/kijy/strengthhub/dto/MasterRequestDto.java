@@ -16,4 +16,5 @@ public class MasterRequestDto {
     private List<String> parts;
     private List<String> certFileUrls;
     private List<String> portfolioUrls;
+    private Long userId;
 }

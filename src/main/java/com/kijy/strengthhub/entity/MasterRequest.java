@@ -26,4 +26,6 @@ public class MasterRequest {
 
     @Column(length = 2000)
     private String portfolioUrls;
+
+    private Long userId;
 }
