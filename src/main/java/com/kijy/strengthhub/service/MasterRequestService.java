@@ -3,8 +3,10 @@ package com.kijy.strengthhub.service;
 import com.kijy.strengthhub.dto.MasterRequestDto;
 import com.kijy.strengthhub.entity.MasterRequest;
 import com.kijy.strengthhub.repository.*;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MasterRequestService {
@@ -27,5 +29,10 @@ public class MasterRequestService {
         request.setCertFileUrls(String.join(",", dto.getCertFileUrls()));
         request.setPortfolioUrls(String.join(",", dto.getPortfolioUrls()));
         return repository.save(request);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MasterRequest> getAllRequests() {
+        return repository.findAll();
     }
 }
