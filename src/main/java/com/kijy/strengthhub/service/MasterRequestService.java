@@ -42,4 +42,9 @@ public class MasterRequestService {
     public Optional<MasterRequest> getRequestById(Long id) {
         return repository.findById(id);
     }
+
+    @Transactional
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
 }

@@ -34,4 +34,14 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("/{id}/role")
+    public ResponseEntity<?> updateUserRole(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        String role = body.get("role");
+        if (role == null || role.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "역할 값이 필요합니다."));
+        }
+
+        userService.updateUserRole(id, role);
+        return ResponseEntity.ok(Map.of("message", "권한 변경 완료"));
+    }
 }

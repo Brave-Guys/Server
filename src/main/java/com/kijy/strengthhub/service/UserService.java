@@ -53,5 +53,11 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public void updateUserRole(Long id, String role) {
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
+        user.setRole(role);
+        userRepository.save(user);
+    }
 
 }
