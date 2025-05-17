@@ -29,6 +29,11 @@ public class MasterRequestController {
         return ResponseEntity.ok(service.getAllRequests());
     }
 
+    @GetMapping("/approved")
+    public ResponseEntity<List<MasterRequest>> getApproved() {
+        return ResponseEntity.ok(service.getApprovedRequests());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<MasterRequest> getOne(@PathVariable Long id) {
         return service.getRequestById(id)
@@ -40,5 +45,17 @@ public class MasterRequestController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/approve")
+    public ResponseEntity<Void> approve(@PathVariable Long id) {
+        service.approve(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{id}/reject")
+    public ResponseEntity<Void> reject(@PathVariable Long id) {
+        service.reject(id);
+        return ResponseEntity.ok().build();
     }
 }

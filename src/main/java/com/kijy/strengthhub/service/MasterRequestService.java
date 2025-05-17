@@ -43,8 +43,27 @@ public class MasterRequestService {
         return repository.findById(id);
     }
 
+    @Transactional(readOnly = true)
+    public List<MasterRequest> getApprovedRequests() {
+        return repository.findByStatus("APPROVED");
+    }
+
     @Transactional
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    @Transactional
+    public void approve(Long id) {
+        MasterRequest request = repository.findById(id).orElseThrow();
+        request.setStatus("APPROVED");
+        repository.save(request);
+    }
+
+    @Transactional
+    public void reject(Long id) {
+        MasterRequest request = repository.findById(id).orElseThrow();
+        request.setStatus("REJECTED");
+        repository.save(request);
     }
 }

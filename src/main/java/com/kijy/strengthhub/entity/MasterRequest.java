@@ -28,4 +28,7 @@ public class MasterRequest {
     private String portfolioUrls;
 
     private Long userId;
+
+    @Column(nullable = false)
+    private String status = "PENDING";
 }
