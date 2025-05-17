@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MasterRequestService {
@@ -35,5 +36,10 @@ public class MasterRequestService {
     @Transactional(readOnly = true)
     public List<MasterRequest> getAllRequests() {
         return repository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<MasterRequest> getRequestById(Long id) {
+        return repository.findById(id);
     }
 }

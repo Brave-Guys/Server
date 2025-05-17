@@ -28,4 +28,11 @@ public class MasterRequestController {
     public ResponseEntity<List<MasterRequest>> getAll() {
         return ResponseEntity.ok(service.getAllRequests());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MasterRequest> getOne(@PathVariable Long id) {
+        return service.getRequestById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
