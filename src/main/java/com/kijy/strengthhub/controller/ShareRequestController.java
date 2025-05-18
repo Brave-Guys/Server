@@ -29,4 +29,11 @@ public class ShareRequestController {
         List<ShareRequest> requests = shareRequestRepository.findByMasterId(masterId);
         return ResponseEntity.ok(requests);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getOne(@PathVariable Long id) {
+        return shareRequestRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
