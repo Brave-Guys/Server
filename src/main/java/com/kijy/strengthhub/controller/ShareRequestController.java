@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/share-requests")
@@ -34,6 +35,18 @@ public class ShareRequestController {
     public ResponseEntity<?> getOne(@PathVariable Long id) {
         return shareRequestRepository.findById(id)
                 .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<?> updateStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        String status = body.get("status");
+        return shareRequestRepository.findById(id)
+                .map(r -> {
+                    r.setStatus(status);
+                    shareRequestRepository.save(r);
+                    return ResponseEntity.ok("상태 업데이트 완료");
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
 }

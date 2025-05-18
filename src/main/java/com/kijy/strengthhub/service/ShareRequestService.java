@@ -21,6 +21,7 @@ public class ShareRequestService {
                 .weight(dto.getWeight())
                 .gender(dto.getGender())
                 .content(dto.getContent())
+                .status("PENDING")
                 .build();
         return repository.save(request);
     }

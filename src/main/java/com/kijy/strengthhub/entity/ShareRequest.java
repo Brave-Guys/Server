@@ -24,4 +24,8 @@ public class ShareRequest {
 
     @Column(length = 1000)
     private String content;
+
+    @Column(nullable = false)
+    private String status = "PENDING";
+
 }
