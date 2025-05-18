@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ShareRequestRepository extends JpaRepository<ShareRequest, Long> {
     List<ShareRequest> findByMasterId(Long masterId);
+    List<ShareRequest> findByUserId(Long userId);
 }

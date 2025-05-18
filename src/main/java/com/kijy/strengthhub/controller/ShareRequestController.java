@@ -49,4 +49,9 @@ public class ShareRequestController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(shareRequestRepository.findByUserId(userId));
+    }
 }
