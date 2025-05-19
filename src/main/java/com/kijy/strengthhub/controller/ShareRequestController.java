@@ -52,6 +52,7 @@ public class ShareRequestController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getByUserId(@PathVariable Long userId) {
-        return ResponseEntity.ok(shareRequestRepository.findByUserId(userId));
+        return ResponseEntity.ok(service.getByUserId(userId));
     }
+
 }
