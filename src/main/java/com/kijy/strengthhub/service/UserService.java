@@ -65,4 +65,13 @@ public class UserService {
         return userRepository.findByRole("SENIOR");
     }
 
+    @Transactional
+    public void updateUserPlanType(Long id, String userPlanType) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        user.setUserPlanType(userPlanType.toUpperCase());
+        userRepository.save(user);
+    }
+
+
 }

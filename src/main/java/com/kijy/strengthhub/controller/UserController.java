@@ -49,4 +49,17 @@ public class UserController {
     public ResponseEntity<?> getSeniorUsers() {
         return ResponseEntity.ok(userService.getSeniorUsers());
     }
+
+
+    @PatchMapping("/{id}/plan")
+    public ResponseEntity<?> updateUserPlanType(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        String plan = body.get("userPlanType");
+        if (plan == null || plan.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "플랜 정보가 필요합니다."));
+        }
+
+        userService.updateUserPlanType(id, plan);
+        return ResponseEntity.ok(Map.of("message", "플랜 변경 완료"));
+    }
+
 }
