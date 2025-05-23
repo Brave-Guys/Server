@@ -20,18 +20,25 @@ public class ShareRequestService {
     private final UserRepository userRepository;
 
     public ShareRequest save(ShareRequestDto dto) {
-        ShareRequest request = ShareRequest.builder()
-                .masterId(dto.getMasterId())
-                .userId(dto.getUserId())
-                .age(dto.getAge())
-                .height(dto.getHeight())
-                .weight(dto.getWeight())
-                .gender(dto.getGender())
-                .content(dto.getContent())
-                .status("PENDING")
-                .build();
-        return repository.save(request);
+    // 중복 관계 확인
+    boolean exists = repository.existsByUserIdAndMasterId(dto.getUserId(), dto.getMasterId());
+    if (exists) {
+        throw new IllegalStateException("이미 해당 상급자에게 신청을 보냈거나 관계가 형성되어 있습니다.");
     }
+
+    ShareRequest request = ShareRequest.builder()
+            .masterId(dto.getMasterId())
+            .userId(dto.getUserId())
+            .age(dto.getAge())
+            .height(dto.getHeight())
+            .weight(dto.getWeight())
+            .gender(dto.getGender())
+            .content(dto.getContent())
+            .status("PENDING")
+            .build();
+
+    return repository.save(request);
+}
 
     public List<ShareRequestResponseDto> getByUserId(Long userId) {
         return repository.findByUserId(userId).stream()
