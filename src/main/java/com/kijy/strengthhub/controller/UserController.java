@@ -1,5 +1,7 @@
 package com.kijy.strengthhub.controller;
 
+import com.kijy.strengthhub.dto.UserResponseDto;
+import com.kijy.strengthhub.entity.User;
 import com.kijy.strengthhub.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,26 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserInfo(@PathVariable Long id) {
+        User user = userService.findById(id);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        UserResponseDto dto = UserResponseDto.builder()
+                .id(user.getId())
+                .userId(user.getUserId())
+                .nickname(user.getName())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .userPlanType(user.getUserPlanType())
+                .profileImgUrl(user.getImgUrl())
+                .build();
+
+        return ResponseEntity.ok(dto);
+    }
 
     @PutMapping("/{userId}")
     public ResponseEntity<?> updateNickname(@PathVariable Long userId, @RequestBody Map<String, String> body) {
