@@ -56,7 +56,7 @@ public class PostController {
             @RequestParam(required = false) String category,
             @RequestParam(required = false) Long writerId
     ) {
-        int size = 10; // 페이지당 10개
+        int size = 15;
         Page<Post> postsPage = postService.getPaginatedPosts(page, size, category, writerId);
 
         List<PostResponseDto> postDtos = postsPage.stream()
