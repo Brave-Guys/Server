@@ -17,4 +17,5 @@ public class ShareRequestResponseDto {
     private String gender;
     private String content;
     private String status;
+    private String parts;
 }
