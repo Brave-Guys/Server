@@ -55,4 +55,13 @@ public class ShareRequestController {
         return ResponseEntity.ok(service.getByUserId(userId));
     }
 
+    @DeleteMapping("/connection")
+    public ResponseEntity<?> cancelConnection(@RequestParam Long userId, @RequestParam Long masterId) {
+        try {
+            service.cancelAcceptedConnection(userId, masterId);
+            return ResponseEntity.ok("계약 관계가 성공적으로 종료되었습니다.");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+}
 }
