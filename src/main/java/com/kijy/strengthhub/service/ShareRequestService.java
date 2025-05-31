@@ -43,6 +43,12 @@ public class ShareRequestService {
 
     return repository.save(request);
 }
+    public void cancelAcceptedConnection(Long userId, Long masterId) {
+    ShareRequest existing = repository.findByUserIdAndMasterIdAndStatus(userId, masterId, "ACCEPTED")
+            .orElseThrow(() -> new IllegalStateException("해당 사용자와 상급자 간에 수락된 관계가 없습니다."));
+    repository.delete(existing);
+}
+
 
     public List<ShareRequestResponseDto> getByUserId(Long userId) {
         return repository.findByUserId(userId).stream()
