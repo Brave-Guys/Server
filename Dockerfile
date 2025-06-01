@@ -7,6 +7,6 @@ RUN ./gradlew build -x test --no-daemon --gradle-user-home /tmp/.gradle
 ### 2단계: 실행
 FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY --from=builder /build/build/libs/strengthhub-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /build/build/libs/app.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
