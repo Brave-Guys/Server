@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -52,11 +53,10 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
         User user = oAuthService.processOAuthPostLogin(email, name, picture);
 
         // attributes Map 재구성
-        Map<String, Object> customAttributes = Map.of(
-                "email", email,
-                "name", name,
-                "picture", picture
-        );
+        Map<String, Object> customAttributes = new HashMap<>();
+        customAttributes.put("email", email != null ? email : "");
+        customAttributes.put("name", name != null ? name : "");
+        customAttributes.put("picture", picture != null ? picture : "");
 
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(user.getRole())),
