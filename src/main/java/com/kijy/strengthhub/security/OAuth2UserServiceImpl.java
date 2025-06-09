@@ -42,6 +42,11 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
             email = (String) kakaoAccount.get("email");
             name = (String) profile.get("nickname");
             picture = (String) profile.get("profile_image_url");
+        } else if ("naver".equals(provider)) {
+            Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+            email = (String) response.get("email");
+            name = (String) response.get("name");
+            picture = (String) response.get("profile_image"); // 프로필 이미지
         }
 
         if (email == null) {
