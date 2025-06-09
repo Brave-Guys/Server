@@ -1,0 +1,23 @@
+package com.kijy.strengthhub.controller;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@Slf4j
+public class OAuthTestController {
+
+    @GetMapping("/oauth2/success")
+    public String success(@AuthenticationPrincipal OAuth2User user) {
+        String name = user.getAttribute("name");
+        String email = user.getAttribute("email");
+        String picture = user.getAttribute("picture"); // 프로필 이미지
+
+        log.info("✅ 구글 로그인 성공: name={}, email={}, picture={}", name, email, picture);
+
+        return "로그인 성공!<br>이름: " + name + "<br>이메일: " + email;
+    }
+}
