@@ -6,6 +6,8 @@ import com.kijy.strengthhub.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -35,6 +37,20 @@ public class UserController {
                 .build();
 
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal OAuth2User oAuth2User) {
+        String email = oAuth2User.getAttribute("email");
+
+        User user = userService.findByEmail(email);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "인증된 사용자가 존재하지 않습니다."));
+        }
+
+        user.setPassword(null);
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{userId}")
