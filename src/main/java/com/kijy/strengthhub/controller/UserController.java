@@ -4,6 +4,7 @@ import com.kijy.strengthhub.dto.UserResponseDto;
 import com.kijy.strengthhub.entity.User;
 import com.kijy.strengthhub.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -82,6 +83,19 @@ public class UserController {
 
         userService.updateUserPlanType(id, plan);
         return ResponseEntity.ok(Map.of("message", "플랜 변경 완료"));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String newPassword = request.get("newPassword");
+
+        try {
+            userService.updatePasswordByEmail(email, newPassword);
+            return ResponseEntity.ok("비밀번호가 변경되었습니다.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
 }

@@ -66,6 +66,14 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public void updatePasswordByEmail(String email, String newPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("해당 이메일로 등록된 사용자가 없습니다."));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
     public List<User> getSeniorUsers() {
         return userRepository.findByRole("SENIOR");
     }
