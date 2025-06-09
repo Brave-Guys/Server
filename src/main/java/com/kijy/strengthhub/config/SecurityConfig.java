@@ -17,11 +17,20 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/oauth2/**", "/css/**", "/js/**", "/api/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers(
+                                "/",
+                                "/oauth2/**",
+                                "/login/**",
+                                "/css/**",
+                                "/js/**",
+                                "/images/**",
+                                "/favicon.ico",
+                                "/api/**"
+                        ).permitAll()
+
+                        .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth -> oauth
-                        .loginPage("/login") // 필요시 커스텀 로그인 페이지
                         .defaultSuccessUrl("/oauth2/success", true)
                 );
 
