@@ -29,7 +29,7 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(oAuth2UserService)
                         )
-                        .defaultSuccessUrl("http://localhost:3000/Web", true)
+                        .defaultSuccessUrl("http://localhost:3000/Web#/oauth2/success", true)
                 );
 
         return http.build();
