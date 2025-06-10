@@ -2,9 +2,9 @@ package com.kijy.strengthhub.service;
 
 import com.kijy.strengthhub.dto.MasterRequestDto;
 import com.kijy.strengthhub.entity.MasterRequest;
-import com.kijy.strengthhub.repository.*;
-import org.springframework.transaction.annotation.Transactional;
+import com.kijy.strengthhub.repository.MasterRequestRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,12 +30,14 @@ public class MasterRequestService {
         request.setParts(String.join(",", dto.getParts()));
         request.setCertFileUrls(String.join(",", dto.getCertFileUrls()));
         request.setPortfolioUrls(String.join(",", dto.getPortfolioUrls()));
+        request.setStatus("PENDING"); // 새 신청서는 기본적으로 보류 상태로 설정
         return repository.save(request);
     }
 
     @Transactional(readOnly = true)
     public List<MasterRequest> getAllRequests() {
-        return repository.findAll();
+        // 상태가 PENDING인 요청만 반환
+        return repository.findByStatus("PENDING");
     }
 
     @Transactional(readOnly = true)
